@@ -1,0 +1,6 @@
+# HTTrack Website Copier Cookie File
+# This file format is compatible with Netscape cookies
+cms.bahria.edu.pk	TRUE	/	FALSE	1999999999	cms	c0m4sjnnoac3awbxldeejbjb
+cms.bahria.edu.pk	TRUE	/	FALSE	1999999999	_	6435a19fd3cc4e9ea290bbaae1f2e9c4
+cms.bahria.edu.pk	TRUE	/	FALSE	1999999999	SameSite	None
+
