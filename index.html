@@ -83,7 +83,27 @@
 	<td id="footer"><small>&copy; Bahria University</small></td>
 	</tr>
 </table>
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAPFQOjtPenZ1j74QcLCt1XjG49FzUPOTY",
+  authDomain: "bahria-9c2ac.firebaseapp.com",
+  projectId: "bahria-9c2ac",
+  storageBucket: "bahria-9c2ac.firebasestorage.app",
+  messagingSenderId: "731792968613",
+  appId: "1:731792968613:web:43067e1c042a87770cb64c",
+  measurementId: "G-6VPPPFDP91"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 </body>
 
 </html>
